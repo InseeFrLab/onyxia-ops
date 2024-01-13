@@ -7,27 +7,5 @@
 
 Template repository for deploying and managing Onyxia Datalab instances via ArgoCD and GitOps. Contains essential configurations and manifests, designed to be forked as a private repo and tailored to specific environments for consistent, automated management.  
 
-This template assumes you have followed the Kubernetes setup described in the [Onyxia installation instruction](https://docs.onyxia.sh).
-
-> Don't forget to search and replace "oidc-spa.dev" by your actual domain!  
-
-## Install ArgoCD  
-
-This is the script to run to install ArgoCD on your cluster.  
-
-```bash
-helm repo add automation https://inseefrlab.github.io/helm-charts-automation
-
-cat << EOF > ./argocd-values.yaml
-ingress:
-  enabled: true
-  hostname: argocd.lab.oidc-spa.dev
-  ingressClassName: onyxia
-secret:
-  password: changeme-argocd
-EOF
-
-helm install argocd automation/argo-cd -f values.yaml
-```
-
+[Instruction about how to use this Repository template](https://docs.onyxia.sh/v/v8/readme/gitops)  
 
