@@ -3,7 +3,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
   hosts:
-    - host: onyxia.my-domain.net
+    - host: onyxia.$DOMAIN
 api:
   regions: [
         {
@@ -15,7 +15,7 @@ api:
                 "singleNamespace": true,
                 "authenticationMode": "serviceAccount",
                 "expose":{
-                  "domain":"lab.my-domain.net"
+                  "domain":"lab.$DOMAIN"
                 }
             }
         }
