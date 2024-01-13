@@ -1,0 +1,135 @@
+onyxia:
+    serviceAccount:
+        clusterAdmin: true
+    ingress:
+        enabled: true
+        annotations:
+            kubernetes.io/ingress.class: nginx
+        hosts:
+            - host: onyxia.oidc-spa.dev
+    web:
+        image:
+            repository: inseefrlab/onyxia-web
+            tag: "s3_overhaull"
+            pullPolicy: "Always"
+        env:
+            HEADER_TEXT_BOLD: My organization
+    api:
+        image:
+            repository: inseefrlab/onyxia-api
+            tag: "latest"
+            pullPolicy: "Always"
+        serviceAccount:
+            create: true
+            clusterAdmin: true
+        nodeSelector:
+            infra: "true"
+        env:
+            #security.cors.allowed_origins: "*" 
+            oidc.issuer-uri: https://auth.lab.oidc-spa.dev/auth/realms/datalab
+            oidc.clientID: onyxia
+            authentication.mode: "openidconnect"
+            #catalog.refresh.ms: "300000"
+        regions: [
+            {
+                "id": "my-region",
+                "name": "The default region of this cluster",
+                "description": "Hosted on my-cluster",
+                "services": {
+                    "type": "KUBERNETES",
+                    #"k8sPublicEndpoint":
+                    #  {
+                    #    "URL": "https://kubernetes.lab.oidc-spa.dev",
+                    #    "oidcConfiguration": {
+                    #        "clientID": "onyxia-kubernetes"
+                    #    }
+                    #  },
+                    "namespacePrefix": "user-",
+                    "usernamePrefix": "oidc-",
+                    #"groupNamespacePrefix": "projet-",
+                    "groupPrefix": "oidc-",
+                    "authenticationMode": "serviceAccount",
+                    "expose": {
+                        "domain":"lab.oidc-spa.dev"
+                    },
+                    "quotas": {
+                        "enabled": true,
+                        "allowUserModification": true,
+                        "default": { 
+                            "requests.storage": "2Ti", 
+                            "count/pods": "100", 
+                            "requests.nvidia.com/gpu": "2" 
+                        }
+                    },
+                    "defaultConfiguration": {
+                        "ipprotection": false,
+                        "networkPolicy": true,
+                        "startupProbe": {
+                            "failureThreshold": 60,
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 10,
+                            "successThreshold": 1,
+                            "timeoutSeconds": 5,
+                        },
+                        "sliders": {
+                            "cpu": {
+                                    "sliderMin": 100,
+                                    "sliderMax": 40000,
+                                    "sliderStep": 100,
+                                    "sliderUnit": "m",
+                            },
+                            "memory": {
+                                    "sliderMin": 1,
+                                    "sliderMax": 200,
+                                    "sliderStep": 1,
+                                    "sliderUnit": "Gi",
+                            },
+                            "gpu": {
+                                    "sliderMin": 1,
+                                    "sliderMax": 2,
+                                    "sliderStep": 1,
+                                    "sliderUnit": "",
+                            },
+                            "disk": {
+                                    "sliderMin": 1,
+                                    "sliderMax": 100,
+                                    "sliderStep": 1,
+                                    "sliderUnit": "Gi"
+                            }
+                        },
+                        "resources": {
+                            "cpuRequest": "100m",
+                            "cpuLimit": "30000m",
+                            "memoryRequest": "2Gi",
+                            "memoryLimit": "50Gi",
+                            "disk": "10Gi",
+                            "gpu": "1",
+                        }
+                    }
+                },
+                "data": {
+                    "S3": {
+                        "URL": "https://minio.lab.oidc-spa.dev",
+                        "sts": {
+                            "durationSeconds": 86400,
+                            "oidcConfiguration": {
+                                "clientID": "onyxia-minio"
+                            }
+                        },
+                        "workingDirectory": {
+                            "bucketMode": "multi",
+                            "bucketNamePrefix": "user-",
+                            "bucketNamePrefixGroup": "project-"
+                        }
+                    }
+                },
+                "vault": {
+                    "URL": "https://vault.lab.oidc-spa.dev",
+                    "kvEngine": "onyxia-kv",
+                    "role": "onyxia-user",
+                    "oidcConfiguration": {
+                        "clientID": "onyxia-vault",
+                    }
+                }
+            }
+        ]
