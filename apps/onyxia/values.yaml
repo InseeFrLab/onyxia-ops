@@ -17,15 +17,15 @@ onyxia:
       pullPolicy: "Always"
     regions: [
           {
-              "id":"my-region",
-              "name":"My Region",
-              "description":"Region hosted on my-cluster",
+              "id": "my-region",
+              "name": "My Region",
+              "description": "Region hosted on my-cluster",
               "services":{
-                  "type":"KUBERNETES",
+                  "type": "KUBERNETES",
                   "singleNamespace": true,
                   "authenticationMode": "serviceAccount",
-                  "expose":{
-                    "domain":"lab.react-dsfr.fr"
+                  "expose": {
+                    "domain": "lab.react-dsfr.fr"
                   }
               }
           }
