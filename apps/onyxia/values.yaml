@@ -20,7 +20,7 @@ onyxia:
               "id": "my-region",
               "name": "My Region",
               "description": "Region hosted on my-cluster",
-              "services":{
+              "services": {
                   "type": "KUBERNETES",
                   "singleNamespace": true,
                   "authenticationMode": "serviceAccount",
