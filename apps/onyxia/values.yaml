@@ -5,16 +5,7 @@ onyxia:
       kubernetes.io/ingress.class: nginx
     hosts:
       - host: datalab.$DOMAIN
-  web:
-    image:
-      repository: inseefrlab/onyxia-web
-      tag: "s3_overhaull"
-      pullPolicy: "Always"
   api:
-    image:
-      repository: inseefrlab/onyxia-api
-      tag: "latest"
-      pullPolicy: "Always"
     regions: [
           {
               "id": "my-region",
