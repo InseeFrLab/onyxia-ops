@@ -27,6 +27,9 @@ onyxia:
           fr: "%PUBLIC_URL%/custom-resources/tos_fr.md"
         }
   api:
+    serviceAccount:
+      create: true
+      clusterAdmin: true
     # The full list of configuration option for the api component is available here:
     # https://github.com/InseeFrLab/onyxia-api?tab=readme-ov-file#configuration
     env:
