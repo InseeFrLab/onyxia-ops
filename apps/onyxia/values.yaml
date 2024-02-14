@@ -1,10 +1,19 @@
 onyxia:
   ingress:
     enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
+    #ingressClassName: nginx
     hosts:
       - host: datalab.$DOMAIN
+  web:
+    env:
+      #GLOBAL_ALERT: |
+      #  {
+      #    severity: "success",
+      #    message: {
+      #      en: "A **big** announcement! [Check it out](https://example.com)!",
+      #      fr: "Une annonce **importante**! [Regardez](https://example.com)!"
+      #    }
+      #  }
   api:
     regions: [
           {
