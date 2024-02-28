@@ -1,0 +1,64 @@
+onyxia:
+  ingress:
+    enabled: true
+    #ingressClassName: nginx
+    hosts:
+      - host: datalab.$DOMAIN
+  web:
+    # The full list of configuration option for the web component is available here: 
+    # https://github.com/InseeFrLab/onyxia/blob/main/web/.env
+    env:
+      #GLOBAL_ALERT: |
+      #  {
+      #    severity: "success",
+      #    message: {
+      #      en: "A **big** announcement! [Check it out](https://example.com)!",
+      #      fr: "Une annonce **importante**! [Regardez](https://example.com)!"
+      #    }
+      #  }
+
+      CUSTOM_RESOURCES: "https://www.sspcloud.fr/onyxia-sspcloud-resources.zip"
+      # The terms of services referenced are in the zip file above.  
+      # You can use your own terms of services by supplying your own zip file.
+      # More information here: https://docs.onyxia.sh/admin-doc/theme  
+      TERMS_OF_SERVICES: |
+        { 
+          en: "%PUBLIC_URL%/custom-resources/tos_en.md", 
+          fr: "%PUBLIC_URL%/custom-resources/tos_fr.md"
+        }
+  api:
+    serviceAccount:
+      create: true
+      clusterAdmin: true
+    # The full list of configuration option for the api component is available here:
+    # https://github.com/InseeFrLab/onyxia-api?tab=readme-ov-file#configuration
+    env:
+      #security.cors.allowed_origins: "*"
+      authentication.mode: "openidconnect"
+      oidc.issuer-uri: "https://auth.lab.$DOMAIN/auth/realms/datalab"
+      oidc.clientID: "onyxia"
+      #oidc.audience: "onyxia"
+      #oidc.extra-query-params: "kc_idp_hint=google&foo=bar"
+      #springdoc.swagger-ui.oauth.clientId: onyxia
+    
+    # The region configuration is available here: 
+    # https://github.com/InseeFrLab/onyxia-api/blob/main/docs/region-configuration.md
+    regions: [
+      {
+        id: "my-region",
+        name: "My Region",
+        description: "Region hosted on my-cluster",
+        services: {
+          type: "KUBERNETES",
+          singleNamespace: false,
+          authenticationMode: "serviceAccount",
+          expose: {
+            domain: "lab.$DOMAIN"
+          },
+          #namespacePrefix:"user-",
+          #usernamePrefix:"oidc-",
+          #groupNamespacePrefix:"project-",
+          #groupPrefix:"oidc-",
+        }
+      }
+    ]
