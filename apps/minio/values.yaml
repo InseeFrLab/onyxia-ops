@@ -1,8 +1,13 @@
 minio:
-  replicas: 2  # Default is 16 nodes but we set to 2 (the minimum) for testing purposes.  
+  # For production use set this to "distributed" and set the replicas to 4 or more.
+  mode: standalone
+
+  # Default is 16 nodes but we set to 2 (the minimum) for testing purposes.  
+  # replicas: 4
   resources:
     requests:
-      memory: "4Gi"  # This is way to little, needs at least 16Gi for production use.  
+      # For production use the 
+      memory: "4Gi"  
   ingress:
     enabled: true
     #annotations:
@@ -24,7 +29,6 @@ minio:
       - hosts:
           - minio-console.lab.$DOMAIN
   environment:
-    # Your user will be able to login to the Minio console using their Onyxia account.  
     MINIO_BROWSER_REDIRECT_URL: https://minio-console.lab.$DOMAIN
   oidc:
     enabled: true
@@ -46,11 +50,11 @@ minio:
             # If you haven't specified this parameter, leave preferred_username, it's
             # the Keycloak's default.
             # You have also to make sure that the onyxia-minio client that you will
-            # create later on has a preffered_username claim in it's OIDC Access Tocken JWT
+            # create later on has a preferred_username claim in it's OIDC Access Token JWT
             # (and that the value of this claim matches the Onyxia username of course).
             # As long as your onyxia and onyxia-minio client shares the same Keycloak realm
             # it will be the case.
-            - 'arn:aws:s3:::user-${jwt:$preferred_username}'
-            - 'arn:aws:s3:::user-${jwt:$preferred_username}/*'
+            - 'arn:aws:s3:::user-${jwt:preferred_username}'
+            - 'arn:aws:s3:::user-${jwt:preferred_username}/*'
           actions:
             - "s3:*"
