@@ -24,6 +24,7 @@ minio:
       - hosts:
           - minio-console.lab.$DOMAIN
   environment:
+    # Your user will be able to login to the Minio console using their Onyxia account.  
     MINIO_BROWSER_REDIRECT_URL: https://minio-console.lab.$DOMAIN
   oidc:
     enabled: true
