@@ -16,17 +16,17 @@ onyxia:
       #  }
   api:
     regions: [
-          {
-              "id": "my-region",
-              "name": "My Region",
-              "description": "Region hosted on my-cluster",
-              "services": {
-                  "type": "KUBERNETES",
-                  "singleNamespace": true,
-                  "authenticationMode": "serviceAccount",
-                  "expose": {
-                    "domain": "lab.$DOMAIN"
-                  }
-              }
+      {
+        id: "my-region",
+        name: "My Region",
+        description: "Region hosted on my-cluster",
+        services: {
+          type: "KUBERNETES",
+          singleNamespace: true,
+          authenticationMode: "serviceAccount",
+          expose: {
+            domain: "lab.$DOMAIN"
           }
-      ]
+        }
+      }
+    ]
