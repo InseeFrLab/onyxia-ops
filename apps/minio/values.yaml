@@ -28,7 +28,7 @@ minio:
     tls:
       - hosts:
           - minio-console.lab.$DOMAIN
-  persistance:
+  persistence:
     size: 10Gi
   environment:
     MINIO_BROWSER_REDIRECT_URL: https://minio-console.lab.$DOMAIN
