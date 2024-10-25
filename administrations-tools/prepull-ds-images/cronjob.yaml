@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: prepull
+spec:
+  schedule: "0 4 * * 1"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: init
+            image: inseefrlab/onyxia-python-minimal:py3.11.10
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - git clone https://github.com/InseeFrLab/helm-charts-interactive-services.git /catalog
+            volumeMounts:
+            - name: catalog
+              mountPath: "/catalog"
+          containers:
+          - name: prepull
+            image: inseefrlab/onyxia-python-minimal:py3.11.10
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - cd /catalog/utils && chmod +x prepull_images.sh && ./prepull_images.sh
+            volumeMounts:
+            - name: catalog
+              mountPath: "/catalog"
+          volumes:
+          - name: catalog
+            emptyDir: {}
+          restartPolicy: Never
+          serviceAccountName: prepull
