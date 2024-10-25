@@ -1,0 +1,37 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pause-services-unused-gpus
+spec:
+  schedule: "0 */2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: init
+            image: inseefrlab/onyxia-base:latest
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - git clone https://github.com/InseeFrLab/onyxia-ops.git /gitops
+            volumeMounts:
+            - name: gitops
+              mountPath: "/gitops"
+          containers:
+          - name: pause-services-unused-gpus
+            image: inseefrlab/onyxia-python-minimal:py3.12.2
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - pip install -q prometheus-api-client && python /gitops/pause-services-unused-gpus/pause-services-unused-gpus.py
+            volumeMounts:
+            - name: gitops
+              mountPath: "/gitops"
+          volumes:
+          - name: gitops
+            emptyDir: {}
+          restartPolicy: Never
+          serviceAccountName: pause-services-unused-gpus
