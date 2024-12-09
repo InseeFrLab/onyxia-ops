@@ -57,7 +57,7 @@ keycloak:
     - name: ONYXIA_RESOURCES_ALLOWED_ORIGINS
       value: "https://datalab.$DOMAIN, http://localhost, http://127.0.0.1"
 
-  initContainers: |
+  initContainers:
     - name: realm-ext-provider
       image: curlimages/curl
       imagePullPolicy: IfNotPresent
@@ -66,16 +66,19 @@ keycloak:
       args:
         - -c
         - |
-          curl -L -f -S -o /extensions/onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v8.4.5/keycloak-theme.jar
+          # NOTE: Here we deploy on Keycloak 24, when updating to Keycloak 26 use this link instead: https://github.com/InseeFrLab/onyxia/releases/download/v10.3.3/keycloak-theme.jar
+          # The Onyxia Keycloak theme is published alongside the Onyxia releases as a artifacts: https://github.com/InseeFrLab/onyxia/releases
+
+          curl -L -f -S -o /extensions/theme-onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v10.3.3/keycloak-theme-for-kc-22-to-25.jar
       volumeMounts:
         - name: extensions
           mountPath: /extensions
 
-  extraVolumeMounts: |
+  extraVolumeMounts:
     - name: extensions
       mountPath: /opt/bitnami/keycloak/providers
 
-  extraVolumes: |
+  extraVolumes:
     - name: extensions
       emptyDir: {}
 
