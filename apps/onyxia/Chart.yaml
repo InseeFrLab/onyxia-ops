@@ -1,7 +1,7 @@
 apiVersion: v2
 name: onyxia
-version: 1.0.0
+version: 1.0.1
 dependencies:
   - name: onyxia
-    version: 10.4.0
+    version: 10.9.7
     repository: https://inseefrlab.github.io/onyxia/
