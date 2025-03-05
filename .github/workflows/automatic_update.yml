@@ -21,4 +21,4 @@ jobs:
           action_name: update_onyxia
           version: ${{github.event.client_payload.release_tag_name}}  
           onyxia_apps: 'onyxia'
-          keycloak_apps: 'keycloakv'
+          keycloak_apps: 'keycloak'
