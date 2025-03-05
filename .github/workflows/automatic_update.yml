@@ -1,0 +1,24 @@
+# NOTE: In your project, you can remove the .github/ directory
+# This is just an action that we have in place to automatically
+# update the version numbers that are pinned so we are sure that
+# this project is up to date at all times.
+
+on:
+  repository_dispatch:
+    types: 
+      - onyxia_release
+
+permissions:
+  contents: write
+
+jobs:
+  update_onyxia:
+    runs-on: ubuntu-latest
+    if: github.event.action == 'onyxia_release'
+    steps:
+      - uses: InseeFrLab/onyxia-ops@gh-actions
+        with: 
+          action_name: update_onyxia
+          version: ${{github.event.client_payload.release_tag_name}}  
+          onyxia_apps: 'onyxia'
+          keycloak_apps: 'keycloakv'
