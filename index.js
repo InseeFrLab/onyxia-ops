@@ -126,13 +126,6 @@ function _run(params) {
                         }
                         chart.setIn(["dependencies", 0, "version"], SemVer_1.SemVer.stringify(SemVer_1.SemVer.parse(version)));
                     }
-                    {
-                        const chartVersion = chart.get("version");
-                        (0, assert_1.assert)(typeof chartVersion === "string", "Chart version should be a string");
-                        const sevVerChartVersion = SemVer_1.SemVer.parse(chartVersion);
-                        sevVerChartVersion.patch++;
-                        chart.set("version", SemVer_1.SemVer.stringify(sevVerChartVersion));
-                    }
                     fs.writeFileSync(chartPath, Buffer.from(yaml_1.default.stringify(chart), "utf8"));
                 });
                 keycloak_apps.split(" ").forEach(appName => {
