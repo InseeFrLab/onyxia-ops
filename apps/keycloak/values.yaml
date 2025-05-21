@@ -66,10 +66,10 @@ keycloak:
       args:
         - -c
         - |
-          # NOTE: Here we deploy on Keycloak 24, when updating to Keycloak 26 use this link instead: https://github.com/InseeFrLab/onyxia/releases/download/v10.18.1/keycloak-theme.jar
+          # NOTE: Here we deploy on Keycloak 24, when updating to Keycloak 26 use this link instead: https://github.com/InseeFrLab/onyxia/releases/download/v10.18.2/keycloak-theme.jar
           # The Onyxia Keycloak theme is published alongside the Onyxia releases as a artifacts: https://github.com/InseeFrLab/onyxia/releases
 
-          curl -L -f -S -o /extensions/theme-onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v10.18.1/keycloak-theme-for-kc-22-to-25.jar
+          curl -L -f -S -o /extensions/theme-onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v10.18.2/keycloak-theme-for-kc-22-to-25.jar
       volumeMounts:
         - name: extensions
           mountPath: /extensions
