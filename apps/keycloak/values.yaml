@@ -77,16 +77,9 @@ keycloak:
 
           curl -L -f -S -o /extensions/theme-onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v10.28.9/keycloak-theme.jar
       volumeMounts:
-        - name: extensions
+        - name: empty-dir
           mountPath: /extensions
-
-  extraVolumeMounts:
-    - name: extensions
-      mountPath: /opt/bitnami/keycloak/providers
-
-  extraVolumes:
-    - name: extensions
-      emptyDir: {}
+          subPath: app-providers-dir
 
   externalDatabase:
     host: keycloakv3-postgresql
