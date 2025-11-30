@@ -3,5 +3,5 @@ name: onyxia
 version: 1.0.0
 dependencies:
   - name: onyxia
-    version: 10.30.5
+    version: 10.30.6
     repository: https://inseefrlab.github.io/onyxia/
