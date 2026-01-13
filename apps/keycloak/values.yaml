@@ -75,7 +75,7 @@ keycloak:
         - |
           # The Onyxia Keycloak theme is published alongside the Onyxia releases as a artifacts: https://github.com/InseeFrLab/onyxia/releases
 
-          curl -L -f -S -o /extensions/theme-onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v10.31.3/keycloak-theme.jar
+          curl -L -f -S -o /extensions/theme-onyxia-web.jar https://github.com/InseeFrLab/onyxia/releases/download/v10.32.0/keycloak-theme.jar
       volumeMounts:
         - name: empty-dir
           mountPath: /extensions
