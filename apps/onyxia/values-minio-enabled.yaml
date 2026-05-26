@@ -64,23 +64,25 @@ onyxia:
         # https://github.com/InseeFrLab/onyxia-api/blob/main/docs/region-configuration.md#s3
         data: {
           S3 : {
-            profileName: "default",
             URL: "https://minio.lab.$DOMAIN",
-            pathStyleAccess: true,
             sts: {
-                durationSeconds: 86400,
+                role: {
+                  profileName: "default",
+                  roleARN: "",
+                  roleSessionName: ""
+                },
                 oidcConfiguration: {
                   clientID: "onyxia-minio"
                 }
             },
-            bookmarkedDirectories: [
+            bookmarks: [
                 {
-                  fullPath: "$1/",
+                  s3Uri: "s3://$1/",
                   title: "Personal Bucket",
                   claimName: "preferred_username",
                 },
                 {
-                  fullPath: "project-$1/",
+                  s3Uri: "s3://project-$1/",
                   title: "Bucket for $1",
                   claimName: "groups"
                 }
