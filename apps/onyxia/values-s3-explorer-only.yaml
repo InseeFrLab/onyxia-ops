@@ -1,0 +1,32 @@
+onyxia:
+  ingress:
+    enabled: true
+    #ingressClassName: nginx
+    hosts:
+      - host: datalab.$DOMAIN
+  web:
+    env:
+      S3: |
+        {
+          URL: "https://minio.lab.$DOMAIN",
+          sts: {
+              role: {
+                profileName: "default",
+                roleARN: "",
+                roleSessionName: ""
+              },
+              oidcConfiguration: {
+                issuerURI: "https://auth.lab.$DOMAIN/auth/realms/datalab",
+                clientID: "onyxia-minio"
+              }
+          },
+          bookmarks: [
+              {
+                s3Uri: "s3://$1/",
+                title: { fr: "Bucket Personnel", en: "Personal Bucket" },
+                claimName: "preferred_username"
+              }
+          ]
+        }
+  api:
+    enabled: false
