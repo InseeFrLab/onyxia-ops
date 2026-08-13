@@ -77,7 +77,7 @@ onyxia:
             },
             bookmarks: [
                 {
-                  s3Uri: "s3://$1/",
+                  s3Uri: "s3://user-$1/",
                   title: "Personal Bucket",
                   claimName: "preferred_username",
                 },
