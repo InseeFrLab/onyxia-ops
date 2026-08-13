@@ -22,7 +22,7 @@ onyxia:
           },
           bookmarks: [
               {
-                s3Uri: "s3://$1/",
+                s3Uri: "s3://user-$1/",
                 title: { fr: "Bucket Personnel", en: "Personal Bucket" },
                 claimName: "preferred_username"
               }
