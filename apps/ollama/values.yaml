@@ -1,0 +1,219 @@
+open-webui:
+  pipelines:
+    strategy:
+      type: Recreate
+    extraEnvVars:
+      - name: PIPELINES_API_KEY
+        value: "$PIPELINES_API_KEY"
+      - name: PIPELINES_URLS
+        value:
+          "https://github.com/open-webui/pipelines/blob/main/examples/filters/lang\
+          fuse_filter_pipeline.py"
+      - name: LANGFUSE_PUBLIC_KEY
+        value: "$LANGFUSE_PUBLIC_KEY"
+      - name: LANGFUSE_SECRET_KEY
+        value: "$LANGFUSE_SECRET_KEY"
+      - name: LANGFUSE_HOST
+        value: "https://langfuse.lab.sspcloud.fr"
+
+  nameOverride: ""
+  namespaceOverride: ""
+
+  websocket:
+    # -- Enables websocket support in Open WebUI with env `ENABLE_WEBSOCKET_SUPPORT`
+    enabled: true
+    # -- Specifies the websocket manager to use with env `WEBSOCKET_MANAGER`: redis (default)
+    manager: redis
+    # -- Specifies the URL of the Redis instance for websocket communication. Template with `redis://[:<password>@]<hostname>:<port>/<db>`
+    #url: redis://open-webui-redis:6379/0
+    # -- Node selector for websocket pods
+    nodeSelector: {}
+    redis:
+      enabled: true
+
+  postgresql:
+    enabled: false
+  ollama:
+    enabled: false
+
+  # -- A list of Ollama API endpoints. These can be added in lieu of automatically installing the Ollama Helm chart, or in addition to it.
+  ollamaUrls: []
+
+  # -- Value of cluster domain
+  clusterDomain: cluster.local
+  # -- Strategy for updating the workload manager: deployment or statefulset
+  strategy: {}
+  # -- Open WebUI image tags can be found here: https://github.com/open-webui/open-webui
+  #image:
+  #repository: ghcr.io/open-webui/open-webui
+  #tag: "dev"
+  #pullPolicy: "Always"
+
+  serviceAccount:
+    enable: true
+    name: ""
+    annotations: {}
+    automountServiceAccountToken: false
+
+  route:
+    enabled: true
+    httpsRedirect: false
+    hostnames:
+      - llm.lab.sspcloud.fr
+    parentRefs:
+      - name: traefik-gateway
+        namespace: traefik
+        sectionName: websecure
+
+  ingress:
+    enabled: false
+    class: "nginx"
+    # -- Use appropriate annotations for your Ingress controller, e.g., for NGINX:
+    annotations:
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    #   # Example for GKE Ingress
+    #   kubernetes.io/ingress.class: "gce"
+    #   kubernetes.io/ingress.global-static-ip-name: "open-webui-external-ip"   #  you need to create this address in GCP console
+    #   # Force HTTP to redirect to HTTPS
+    #   nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    #   nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    #   nginx.ingress.kubernetes.io/permanent-redirect: "https://chat.example.com"
+    #   networking.gke.io/managed-certificates: "mydomain-chat-cert"
+    #   # nginx.ingress.kubernetes.io/rewrite-target: /
+    host: "llm.lab.sspcloud.fr" # update to your real domain
+    additionalHosts: []
+    tls: true
+    existingSecret: ""
+  persistence:
+    enabled: true
+    provider: s3
+    s3:
+      # -- Sets the access key ID for S3 storage
+      # @section -- Amazon S3 Storage configuration
+      accessKey: "$OPENWEBUI_S3_ACCESS_KEY"
+      # -- Sets the secret access key for S3 storage (ignored if secretKeyExistingSecret is set)
+      # @section -- Amazon S3 Storage configuration
+      secretKey: "$OPENWEBUI_S3_SECRET_KEY"
+      # -- Sets the endpoint url for S3 storage
+      # @section -- Amazon S3 Storage configuration
+      endpointUrl: "https://minio.lab.sspcloud.fr"
+      # -- Sets the region name for S3 storage
+      # @section -- Amazon S3 Storage configuration
+      region: "us-east-1"
+      # -- Sets the bucket name for S3 storage
+      # @section -- Amazon S3 Storage configuration
+      bucket: "openwebui-data"
+      # -- Sets the key prefix for a S3 object
+      # @section -- Amazon S3 Storage configuration
+      keyPrefix: ""
+  replicaCount: 5
+  resources:
+    # -- Pod requests
+    requests:
+      # Memory request
+      memory: 4Gi
+
+      # CPU request
+      cpu: "1"
+
+    # -- Pod limit
+    limits:
+      memory: 16Gi
+      cpu: "8"
+
+  # -- Enables the use of OpenAI APIs
+  enableOpenaiApi: false
+
+  databaseUrl: postgresql://openwebui:$OPENWEBUI_POSTGRES_PASSWORD@pg-openwebui-rw:5432/openwebui
+
+  readinessProbe:
+    httpGet:
+      path: /health/db
+      port: http
+    failureThreshold: 10
+    periodSeconds: 10
+
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    failureThreshold: 10
+    periodSeconds: 10
+
+  extraEnvVars:
+    - name: ENV
+      value: dev
+    - name: ENABLE_PERSISTENT_CONFIG
+      value: "true"
+    - name: WEBUI_SESSION_COOKIE_SAME_SITE
+      value: lax
+    - name: WEBUI_AUTH_COOKIE_SAME_SITE
+      value: lax
+    # -- Default API key value for Pipelines. Should be updated in a production deployment, or be changed to the required API key if not using Pipelines
+    - name: UVICORN_WORKERS
+      value: "1"
+    - name: OAUTH_CLIENT_ID
+      value: openwebui
+    - name: OAUTH_CLIENT_SECRET
+      value: $OPENWEBUI_CLIENT_SECRET
+    - name: OPENID_PROVIDER_URL
+      value: https://auth.lab.$DOMAIN/realms/sspcloud/.well-known/openid-configuration
+    - name: OPENID_REDIRECT_URI
+      value: https://llm.lab.$DOMAIN/oauth/oidc/callback
+    - name: OAUTH_TOKEN_EXCHANGE_TRUSTED_CLIENT_IDS
+      value: "onyxia_openwebui,onyxia"
+    - name: OAUTH_PROVIDER_NAME
+      value: "sso"
+    - name: OAUTH_AUTO_REDIRECT
+      value: "true"
+    - name: ENABLE_OAUTH_ROLE_MANAGEMENT
+      value: "true"
+    - name: ENABLE_OAUTH_GROUP_CREATION
+      value: "true"
+    - name: OAUTH_ROLES_CLAIM
+      value: openwebui-roles
+    - name: OAUTH_ALLOWED_ROLES
+      value: "*"
+    - name: OAUTH_ADMIN_ROLES
+      value: admin
+    - name: ENABLE_OAUTH_SIGNUP
+      value: "true"
+    - name: OAUTH_MERGE_ACCOUNTS_BY_EMAIL
+      value: "true"
+    - name: ENABLE_LOGIN_FORM
+      value: "false"
+    - name: ENABLE_ADMIN_CHAT_ACCESS
+      value: "false"
+    - name: DEFAULT_USER_ROLE
+      value: "user"
+    #- name: WEBUI_BANNERS
+    #  value: "[{\"id\": \"1\", \"type\": \"warning\", \"title\": \"Testing only
+    #    purpose.\", \"content\": \"We are testing this type of service. It may
+    #    be discontinued in the future. Do not send sensitive data.\",
+    #    \"dismissible\": true, \"timestamp\": 10000}]"
+    - name: ENABLE_OTEL
+      value: "true"
+    - name: ENABLE_OTEL_METRICS
+      value: "true"
+    - name: OTEL_EXPORTER_OTLP_ENDPOINT
+      value: "http://opentelemetry-collector:4317"
+    - name: OTEL_EXPORTER_OTLP_INSECURE
+      value: "true"
+    - name: OTEL_SERVICE_NAME
+      value: "open-webui"
+    - name: WEBUI_SECRET_KEY
+      value: $WEBUI_SECRET_KEY
+    - name: RAG_EMBEDDING_ENGINE
+      value: ollama
+    - name: RAG_EMBEDDING_MODEL
+      value: qwen3-embedding:8b
+    - name: RAG_OLLAMA_BASE_URL
+      value: "http://ollama.ollama:11434"
+    - name: ENABLE_FORWARD_USER_INFO_HEADERS
+      value: "True"
+    - name: ENABLE_OAUTH_TOKEN_EXCHANGE
+      value: "true"
+    - name: VECTOR_DB
+      value: pgvector
+    - name: PGVECTOR_DB_URL
+      value: postgresql://postgres:$PGVECTOR_POSTGRES_PASSWORD@pg-openwebui-rw:5432/openwebui

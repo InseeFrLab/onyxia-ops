@@ -7,7 +7,7 @@
         <br/>
         <a href="https://datalab.$DOMAIN/">Onyxia - datalab.$DOMAIN</a>
         <br />
-        <a href="https://auth.lab.$DOMAIN/auth">Keycloak - argocd.lab.$DOMAIN/auth</a>
+        <a href="https://auth.lab.$DOMAIN/">Keycloak - auth.lab.$DOMAIN</a>
         <br />
         <a href="https://minio-console.lab.$DOMAIN">MinIO - minio-console.lab.$DOMAIN</a>
         <br />

@@ -1,0 +1,35 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: pg-openwebui
+spec:
+  instances: 3
+
+  storage:
+    size: 100Gi # PVC size per instance
+  postgresql:
+    parameters:
+      max_connections: "300"
+    extensions:
+      - name: pgvector
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    major: 18
+    name: postgresql-minimal-trixie
+
+  enablePDB: false
+  enableSuperuserAccess: true
+
+  affinity:
+    tolerations:
+      - key: "infra"
+        operator: "Exists"
+    nodeSelector:
+      infra: "true"
+  bootstrap:
+    initdb:
+      database: openwebui
+      owner: openwebui
+      secret:
+        name: pg-openwebui

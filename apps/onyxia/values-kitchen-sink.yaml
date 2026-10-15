@@ -1,0 +1,1065 @@
+onyxia:
+  ingress:
+    enabled: false
+    #annotations:
+    #  kubernetes.io/ingress.class: nginx
+    #hosts:
+    #  - host: datalab.$DOMAIN
+    #tls:
+    #  - hosts:
+    #      - datalab.$DOMAIN
+  httpRoute:
+    enabled: true
+    annotations: {}
+    parentRefs:
+      # parentRefs must reference the Gateway configured by the cluster administrator.
+      # parentRefs[0].name is required when httpRoute.enabled=true.
+      - name: traefik-gateway
+        namespace: traefik
+        # sectionName:
+        # port:
+    hostnames:
+      - datalab.$DOMAIN
+  web:
+    replicaCount: 2
+    #image:
+    #  tag: "4.56.6"
+    #  pullPolicy: "Always"
+    nodeSelector:
+      infra: "true"
+    tolerations:
+      - key: "infra"
+        operator: "Exists"
+    env:
+      ALLOW_THEME_TESTING_VIA_URL: "true"
+      CUSTOM_RESOURCES: "https://www.sspcloud.fr/sspcloud_onyxia_custom_resource.zip"
+      CUSTOM_HTML_HEAD: |
+        <script src="%PUBLIC_URL%/custom-resources/plugin.mjs?v=2" type="module"></script>
+      CONTACT_FOR_ADDING_EMAIL_DOMAIN: |
+        {
+          "en": "If your email domain is not yet allowed [contact us](https://join.slack.com/t/3innovation/shared_invite/zt-1bo6y53oy-Y~zKzR2SRg37pq5oYgiPuA)",
+          "fr": "Si votre domaine de messagerie n'est pas encore autorisé [contactez-nous](https://join.slack.com/t/3innovation/shared_invite/zt-1bo6y53oy-Y~zKzR2SRg37pq5oYgiPuA)"
+        }
+      GLOBAL_ALERT: |
+        {
+          severity: "success",
+          message: {
+            en: "If you like the platform, you can give us a ⭐️ [on GitHub](https://github.com/InseeFrLab/onyxia). Thank you very much! 😊",
+            fr: "Si vous aimez la plateforme, vous pouvez nous mettre une ⭐️ [sur GitHub](https://github.com/InseeFrLab/onyxia). Merci beaucoup ! 😊",
+          }
+        }
+      DISABLE_PERSONAL_INFOS_INJECTION_IN_GROUP: true
+      TERMS_OF_SERVICES: |
+        {
+          en: "%PUBLIC_URL%/custom-resources/tos_en.md",
+          fr: "%PUBLIC_URL%/custom-resources/tos_fr.md"
+        }
+      HEADER_LINKS: |
+        [
+          {
+            label: {
+              en: "Tutorials",
+              fr: "Tutoriels",
+              "zh-CN": "教程",
+              fi: "Opastus",
+              no: "Opplæring",
+              it: "Tutorial",
+              nl: "Zelfstudie"
+            },
+            icon: "School",
+            url: "https://www.$DOMAIN/catalog"
+          },
+          {
+            label: "AI Chat",
+            icon: "%PUBLIC_URL%/custom-resources/open-webui.svg",
+            url: "https://llm.lab.$DOMAIN"
+          },
+          {
+            "label": {
+              "en": "Contact us",
+              "fr": "Contactez nous"
+            },
+            icon: "%PUBLIC_URL%/custom-resources/slack.svg",
+            "url": "https://join.slack.com/t/3innovation/shared_invite/zt-2skhjkavr-xO~uTRLgoNOCm6ubLpKG7Q"
+          }
+        ]
+      HOMEPAGE_CALL_TO_ACTION_BUTTON_AUTHENTICATED: |
+        {
+          "label": {
+            "fr": "Nouvel utilisateur du datalab ?",
+            "en": "New user of the datalab?",
+            "zh-CN": "数据实验室新用户？",
+            "fi": "Uusi datalabin käyttäjä?",
+            "no": "Ny bruker av datalaben?",
+            "it": "Nuovo utente del datalab?",
+            "nl": "Nieuwe gebruiker van het datalab?"
+          },
+          "startIcon": "MenuBook",
+          "url": "https://docs.$DOMAIN"
+        }
+
+      SOCIAL_MEDIA_TITLE: SSPCloud Datalab
+      SOCIAL_MEDIA_DESCRIPTION: Open Innovation Platform powered by Onyxia
+      SOCIAL_MEDIA_IMAGE: "https://datalab.$DOMAIN/custom-resources/social-preview.png"
+      HEADER_TEXT_BOLD: SSPCloud
+      HEADER_TEXT_FOCUS: Datalab
+      FONT: |
+        {
+          fontFamily: "Geist",
+          dirUrl: "%PUBLIC_URL%/custom-resources/fonts/Geist",
+          "400": "Geist-Regular.woff2",
+          "500": "Geist-Medium.woff2",
+          "600": "Geist-SemiBold.woff2",
+          "700": "Geist-Bold.woff2"
+        }
+      PALETTE_OVERRIDE: |
+        {
+          focus: {
+              main: "#3559FC",
+              light: "#4775FF",
+              light2: "#BDCDFF"
+          },
+          dark: {
+              main: "#22252F",
+              light: "#333847",
+              greyVariant1: "#1C1F27",
+              greyVariant2: "#394053",
+              greyVariant3: "#505C79",
+              greyVariant4: "#9AA6BE",
+              greyVariant5: "#CCD4E6"
+          },
+          light: {
+              main: "#ECEDF2",
+              light: "#F6F7F9",
+              greyVariant1: "#E5EAF2",
+              greyVariant2: "#CCD4E6",
+              greyVariant3: "#9AA6BE",
+              greyVariant4: "#505C79",
+              greyVariant5: "#394053"
+          }
+        }
+      HOMEPAGE_MAIN_ASSET: "false"
+      FAVICON: "%PUBLIC_URL%/custom-resources/favicon.svg"
+      BACKGROUND_ASSET: |
+        {
+          "light": "%PUBLIC_URL%/custom-resources/OnyxiaNeumorphismLightMode.svg",
+          "dark": "%PUBLIC_URL%/custom-resources/OnyxiaNeumorphismDarkMode.svg"
+        }
+      OIDC_DEBUG_LOGS: "false"
+
+  api:
+    replicaCount: 3
+    image:
+      pullPolicy: "Always"
+      tag: "latest"
+    serviceAccount:
+      create: true
+      clusterAdmin: true
+    nodeSelector:
+      infra: "true"
+    tolerations:
+      - key: "infra"
+        operator: "Exists"
+    env:
+      #security.cors.allowed_origins: "*"
+      authentication.mode: "openidconnect"
+      oidc.issuer-uri: "https://auth.lab.$DOMAIN/realms/datalab"
+      oidc.clientID: "onyxia"
+      oidc.audience: "onyxia-api"
+      oidc.username-claim: "onyxia-username"
+      oidc.roles-claim: "onyxia-roles"
+      oidc.groups-claim: "groups"
+    schemas:
+      enabled: true
+      roles:
+        - roleName: vip
+          files:
+            - relativePath: nodeSelector-gpu.json
+              content: |
+                {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "title": "Node selector",
+                  "type": "object",
+                  "properties": {
+                    "gpu-vram": {
+                      "title": "GPU Grade (VRAM)",
+                      "type": "string",
+                      "default": "16GB",
+                      "enum": ["16GB","80GB"]
+                    }
+                  },
+                  "additionalProperties": true
+                }
+            - relativePath: llModel.json
+              content: |
+                {
+                  "$schema": "http://json-schema.org/draft-07/schema#",
+                  "title": "Model",
+                  "description": "[see](https://datalab.$DOMAIN/s3/projet-models-hf/diffusion/hf_hub/?profile=default)",
+                  "type": "string"
+                }
+      files:
+        - relativePath: ide/networking.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Network access",
+              "type": "object",
+              "form": true,
+              "properties": {
+                "user": {
+                  "title": "Ports",
+                  "type": "object",
+                  "properties": {
+                    "enabled": {
+                      "title": "Enable access to your service through specific ports",
+                      "type": "boolean",
+                      "default": false
+                    },
+                    "port": {
+                      "type": "integer",
+                      "x-onyxia": {
+                        "hidden": true
+                      }
+                    },
+                    "ports": {
+                      "title": "Port numbers to expose",
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "uniqueItems": true,
+                        "default": 5000
+                      },
+                      "default": [5000],
+                      "hidden": {
+                        "value": false,
+                        "path": "enabled",
+                        "isPathRelative": true
+                      }
+                    }
+                  }
+                }
+              }
+            }
+        - relativePath: network-policy.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Network access policy",
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "title": "Only allow access from the same namespace",
+                  "type": "boolean",
+                  "default": true
+                },
+                "from": {
+                  "description": "Array of sources allowed to have network access to your service",
+                  "type": "array",
+                  "hidden": true,
+                  "default": [
+                    { "ipBlock": { "cidr": "10.233.103.0/32" } },
+                    { "ipBlock": { "cidr": "10.233.111.0/32" } },
+                    { "ipBlock": { "cidr": "10.233.116.0/32" } },
+                    { "ipBlock": { "cidr": "10.233.108.0/32" } }
+                  ]
+                }
+              }
+            }
+        - relativePath: ide/git.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "GIT",
+              "description": "Git user configuration",
+              "type": "object",
+              "properties": {
+                  "enabled": {
+                      "type": "boolean",
+                      "description": "Add git config inside your environment",
+                      "default": true
+                  },
+                  "name": {
+                      "type": "string",
+                      "description": "user name for git",
+                      "default": "",
+                      "x-onyxia": {
+                          "overwriteDefaultWith": "{{git.name}}"
+                      },
+                      "hidden": {
+                          "value": false,
+                          "path": "enabled",
+                          "isPathRelative": true
+                      }
+                  },
+                  "email": {
+                      "type": "string",
+                      "description": "user email for git",
+                      "default": "",
+                      "x-onyxia": {
+                          "overwriteDefaultWith": "{{git.email}}"
+                      },
+                      "hidden": {
+                          "value": false,
+                          "path": "enabled",
+                          "isPathRelative": true
+                      }
+                  },
+                  "cache": {
+                      "type": "string",
+                      "description": "duration in seconds of the credentials cache duration",
+                      "default": "",
+                      "x-onyxia": {
+                          "overwriteDefaultWith": "{{git.credentials_cache_duration}}"
+                      },
+                      "hidden": {
+                          "value": false,
+                          "path": "enabled",
+                          "isPathRelative": true
+                      }
+                  },
+                  "token": {
+                      "type": "string",
+                      "description": "personal access token",
+                      "default": "",
+                      "render": "password",
+                      "x-onyxia": {
+                          "overwriteDefaultWith": "{{git.token}}"
+                      },
+                      "hidden": {
+                          "value": false,
+                          "path": "enabled",
+                          "isPathRelative": true
+                      }
+                  },
+                  "repository": {
+                      "type": "string",
+                      "description": "Repository url",
+                      "default": "",
+                      "x-onyxia": {
+                          "overwriteDefaultWith": "{{git.project}}"
+                      },
+                      "hidden": {
+                          "value": false,
+                          "path": "enabled",
+                          "isPathRelative": true
+                      }
+                  },
+                  "branch": {
+                      "type": "string",
+                      "description": "Branch automatically checked out",
+                      "default": "",
+                      "hidden": {
+                          "value": false,
+                          "path": "enabled",
+                          "isPathRelative": true
+                      }
+                  },
+                  "asCodeServerRoot": {
+                      "title": "Open the service in the clone folder",
+                      "type": "boolean",
+                      "default": false,
+                      "hidden": {
+                      "value": false,
+                      "path": "enabled",
+                      "isPathRelative": true
+                      }
+                  }
+              }
+            }
+        - relativePath: proxy.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "hidden": true,
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "default": false
+                },
+                "httpProxy": {
+                  "type": "string",
+                  "default": ""
+                },
+                "httpsProxy": {
+                  "type": "string",
+                  "default": ""
+                },
+                "noProxy": {
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            }
+        - relativePath: ide/message.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "type": "object",
+              "hidden": true,
+              "properties": {
+                "fr": {
+                  "type": "string",
+                  "default": "**NB:** ce service pourrait être supprimé après 7 jours d'utilisation en raison de nos règles de gestion"
+                },
+                "en": {
+                  "type": "string",
+                  "default": "**Warning:** this service may be deleted after 7 days due to our management policies"
+                }
+              }
+            }
+        - relativePath: ide/resources-gpu.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Resources (CPU/RAM/GPU)",
+              "description": "Requested resources are reserved, even if unused, please be considerate of others. Limits are strict and may cause slowdowns or out-of-memory errors.",
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "description": "Guaranteed resources",
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "title": "CPU",
+                      "description": "Guaranteed CPU allocation",
+                      "type": "string",
+                      "default": "100m",
+                      "render": "slider",
+                      "sliderMin": 100,
+                      "sliderMax": 30000,
+                      "sliderStep": 100,
+                      "sliderUnit": "m",
+                      "sliderExtremity": "down",
+                      "sliderExtremitySemantic": "guaranteed",
+                      "sliderRangeId": "cpu"
+                    },
+                    "memory": {
+                      "title": "memory",
+                      "description": "Guaranteed memory allocation",
+                      "type": "string",
+                      "default": "2Gi",
+                      "render": "slider",
+                      "sliderMin": 1,
+                      "sliderMax": 200,
+                      "sliderStep": 1,
+                      "sliderUnit": "Gi",
+                      "sliderExtremity": "down",
+                      "sliderExtremitySemantic": "guaranteed",
+                      "sliderRangeId": "memory"
+                    }
+                  }
+                },
+                "limits": {
+                  "description": "max resources",
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "title": "CPU",
+                      "description": "Maximum CPU allocation",
+                      "type": "string",
+                      "default": "15000m",
+                      "render": "slider",
+                      "sliderMin": 100,
+                      "sliderMax": 30000,
+                      "sliderStep": 100,
+                      "sliderUnit": "m",
+                      "sliderExtremity": "up",
+                      "sliderExtremitySemantic": "Maximum",
+                      "sliderRangeId": "cpu"
+                    },
+                    "memory": {
+                      "title": "Memory",
+                      "description": "Maximum memory allocation",
+                      "type": "string",
+                      "default": "50Gi",
+                      "render": "slider",
+                      "sliderMin": 1,
+                      "sliderMax": 200,
+                      "sliderStep": 1,
+                      "sliderUnit": "Gi",
+                      "sliderExtremity": "up",
+                      "sliderExtremitySemantic": "Maximum",
+                      "sliderRangeId": "memory"
+                    },
+                    "nvidia.com/gpu": {
+                      "description": "GPU to allocate to this instance. This is also requested",
+                      "type": "string",
+                      "default": "1",
+                      "enum": ["1"]
+                    }
+                  }
+                }
+              }
+            }
+        - relativePath: vllm/resources-gpu.json
+          content: |
+            {
+                "$schema": "http://json-schema.org/draft-07/schema#",
+                "title": "Resources",
+                "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
+                "type": "object",
+                "properties": {
+                    "requests": {
+                        "description": "Guaranteed resources",
+                        "type": "object",
+                        "properties": {
+                            "cpu": {
+                                "description": "The amount of cpu guaranteed",
+                                "title": "CPU",
+                                "type": "string",
+                                "default": "100m",
+                                "render": "slider",
+                                "sliderMin": 100,
+                                "sliderMax": 30000,
+                                "sliderStep": 100,
+                                "sliderUnit": "m",
+                                "sliderExtremity": "down",
+                                "sliderExtremitySemantic": "guaranteed",
+                                "sliderRangeId": "cpu"
+                            },
+                            "memory": {
+                                "description": "The amount of memory guaranteed",
+                                "title": "memory",
+                                "type": "string",
+                                "default": "2Gi",
+                                "render": "slider",
+                                "sliderMin": 1,
+                                "sliderMax": 200,
+                                "sliderStep": 1,
+                                "sliderUnit": "Gi",
+                                "sliderExtremity": "down",
+                                "sliderExtremitySemantic": "guaranteed",
+                                "sliderRangeId": "memory"
+                            }
+                        }
+                    },
+                    "limits": {
+                        "description": "max resources",
+                        "type": "object",
+                        "properties": {
+                            "cpu": {
+                                "description": "The maximum amount of cpu",
+                                "title": "CPU",
+                                "type": "string",
+                                "default": "15000m",
+                                "render": "slider",
+                                "sliderMin": 100,
+                                "sliderMax": 30000,
+                                "sliderStep": 100,
+                                "sliderUnit": "m",
+                                "sliderExtremity": "up",
+                                "sliderExtremitySemantic": "Maximum",
+                                "sliderRangeId": "cpu"
+                            },
+                            "memory": {
+                                "description": "The maximum amount of memory",
+                                "title": "Memory",
+                                "type": "string",
+                                "default": "50Gi",
+                                "render": "slider",
+                                "sliderMin": 1,
+                                "sliderMax": 200,
+                                "sliderStep": 1,
+                                "sliderUnit": "Gi",
+                                "sliderExtremity": "up",
+                                "sliderExtremitySemantic": "Maximum",
+                                "sliderRangeId": "memory"
+                            },
+                            "gpu": {
+                              "type": "object",
+                              "properties": {
+                                "number": {
+                                  "description": "GPU to allocate to this instance. This is also requested",
+                                  "type": "integer",
+                                  "default": 1,
+                                  "enum": [0,1]
+                                  }
+                               }
+                            }
+                        }
+                    }
+                }
+            }
+        - relativePath: ide/init.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Initialization scripts",
+              "type": "object",
+              "properties": {
+                "regionInit": {
+                  "type": "string",
+                  "default": "",
+                  "const": "",
+                  "hidden": true
+                },
+                "personalInit": {
+                  "title": "Use a custom script (URL)",
+                  "description": "[Voir des examples](https://github.com/InseeFrLab/sspcloud-init-scripts.git)",
+                  "type": "string",
+                  "default": ""
+                },
+                "personalInitArgs": {
+                  "title": "Arguments for the custom script",
+                  "type": "string",
+                  "default": ""
+                }
+              }
+            }
+        - relativePath: ide/resources.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Resources (CPU/RAM)",
+              "description": "Requested resources are reserved, even if unused, please be considerate of others. Limits are strict and may cause slowdowns or out-of-memory errors.",
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "description": "Guaranteed resources",
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "title": "CPU",
+                      "description": "Guaranteed CPU allocation",
+                      "type": "string",
+                      "default": "100m",
+                      "render": "slider",
+                      "sliderMin": 100,
+                      "sliderMax": 30000,
+                      "sliderStep": 100,
+                      "sliderUnit": "m",
+                      "sliderExtremity": "down",
+                      "sliderExtremitySemantic": "guaranteed",
+                      "sliderRangeId": "cpu"
+                    },
+                    "memory": {
+                      "title": "Memory",
+                      "description": "Guaranteed memory allocation",
+                      "type": "string",
+                      "default": "2Gi",
+                      "render": "slider",
+                      "sliderMin": 1,
+                      "sliderMax": 200,
+                      "sliderStep": 1,
+                      "sliderUnit": "Gi",
+                      "sliderExtremity": "down",
+                      "sliderExtremitySemantic": "guaranteed",
+                      "sliderRangeId": "memory"
+                    }
+                  }
+                },
+                "limits": {
+                  "description": "max resources",
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "title": "CPU",
+                      "description": "Maximum CPU allocation",
+                      "type": "string",
+                      "default": "15000m",
+                      "render": "slider",
+                      "sliderMin": 100,
+                      "sliderMax": 30000,
+                      "sliderStep": 100,
+                      "sliderUnit": "m",
+                      "sliderExtremity": "up",
+                      "sliderExtremitySemantic": "Maximum",
+                      "sliderRangeId": "cpu"
+                    },
+                    "memory": {
+                      "title": "Memory",
+                      "description": "Maximum memory allocation",
+                      "type": "string",
+                      "default": "50Gi",
+                      "render": "slider",
+                      "sliderMin": 1,
+                      "sliderMax": 200,
+                      "sliderStep": 1,
+                      "sliderUnit": "Gi",
+                      "sliderExtremity": "up",
+                      "sliderExtremitySemantic": "Maximum",
+                      "sliderRangeId": "memory"
+                    }
+                  }
+                }
+              }
+            }
+        - relativePath: nodeSelector-gpu.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Node selector",
+              "type": "object",
+              "properties": {
+                "gpu-vram": {
+                  "title": "GPU Grade (VRAM)",
+                  "type": "string",
+                  "const": "16GB",
+                  "default": "16GB"
+                }
+              },
+              "additionalProperties": false
+            }
+        - relativePath: spark.json
+          content: |
+            {
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Spark",
+              "type": "object",
+              "properties": {
+                "ui": {
+                  "title": "Enable monitoring interface",
+                  "type": "boolean",
+                  "default": true
+                },
+                "hostname": {
+                  "type": "string",
+                  "form": true,
+                  "title": "Hostname",
+                  "x-onyxia": {
+                    "hidden": true,
+                    "overwriteDefaultWith": "{{project.id}}-{{k8s.randomSubdomain}}-spark.{{k8s.domain}}"
+                  }
+                },
+                "default": {
+                  "title": "Create a Spark configuration",
+                  "type": "boolean",
+                  "default": true
+                },
+                "disabledCertChecking": {
+                  "title": "Disable certificate checking for S3 storage",
+                  "description": "(do not disable in production)",
+                  "type": "boolean",
+                  "default": false
+                },
+                "userConfig": {
+                  "title": "Spark configuration (spark-default.conf)",
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "default": {
+                    "spark.dynamicAllocation.enabled": "true",
+                    "spark.dynamicAllocation.initialExecutors": "1",
+                    "spark.dynamicAllocation.minExecutors": "1",
+                    "spark.dynamicAllocation.maxExecutors": "10",
+                    "spark.executor.memory": "2g",
+                    "spark.driver.memory": "2g",
+                    "spark.dynamicAllocation.executorAllocationRatio": "1",
+                    "spark.dynamicAllocation.shuffleTracking.enabled": "true",
+                    "spark.hadoop.fs.s3a.bucket.all.committer.magic.enabled": "true"
+                  },
+                  "hidden": {
+                    "value": false,
+                    "path": "default",
+                    "isPathRelative": true
+                  }
+                }
+              }
+            }
+    catalogs: [
+      {
+        id: "ide",
+        name: "Interactive services",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-interactive-services",
+        status: "PROD",
+        highlightedCharts: ["jupyter-python", "rstudio", "vscode-python"],
+        excludedCharts: ["jupyter-r", "vscode-r", "rstudio-sparkr", "library-chart"],
+        type: "helm",
+        multipleServicesMode: "maxNumber",
+        maxNumberOfVersions: 5
+      },
+      {
+        id: "databases",
+        name: "Databases",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-databases",
+        status: "PROD",
+        highlightedCharts: [
+          "postgresql-cnpg",
+          "elastic",
+          "opensearch",
+          "kafka",
+          "trino",
+          "spark-thrift-server",
+          "lakefs",
+          "mariadb",
+          "mongodb",
+          "neo4j",
+          "nocodb",
+          "pgadmin",
+          "spark-history",
+          "cloudbeaver",
+          "metabase"
+        ],
+        excludedCharts: ["postgresql","hive-metastore"],
+        type: "helm"
+      },
+      {
+        id: "inseefrlab-helm-charts-datascience",
+        name: "Deprecated",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-datascience",
+        status: "PROD",
+        highlightedCharts: ["ubuntu"],
+        excludedCharts: [
+          "cloudshell",
+          "rstudio",
+          "jupyter",
+          "vscode",
+          "lakefs",
+          "jena",
+          "mariadb",
+          "spark-history",
+          "dask",
+          "label-studio",
+          "spark-thrift-server",
+          "postgresql",
+          "elastic",
+          "mongodb",
+          "argo-cd",
+          "argo-workflows",
+          "hive-metastore",
+          "mlflow",
+          "postgresql",
+          "kafka",
+          "neo4j",
+          "nocodb",
+          "pgadmin",
+          "superset",
+          "pinot",
+          "trino",
+          "tensorflow",
+          "redash",
+          "delta-sharing-server",
+          "openrefine",
+          "blazingsql",
+          "library-chart"
+        ],
+        type: "helm",
+        multipleServicesMode: "maxNumber",
+        maxNumberOfVersions: 2
+      },
+      {
+        id: "automation",
+        name: "Automation",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-automation",
+        status: "PROD",
+        highlightedCharts: ["argo-workflows", "mlflow", "metaflow", "argo-cd", "label-studio"],
+        excludedCharts: ["langfuse"],
+        type: "helm"
+      },
+      {
+        id: "divers",
+        name: "Experimental",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-miscellaneous",
+        status: "PROD",
+        type: "helm",
+        excludedCharts: ["delta-sharing-server", "bastionlab"]
+      },
+      {
+        id: "dataviz",
+        name: "Dataviz",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-datavisualization",
+        status: "PROD",
+        type: "helm"
+      },
+      {
+        id: "inseefrlab-helm-charts-trainings",
+        name: "Inseefrlab trainings",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-trainings",
+        # NOTE: Not listed in the UI but accessible by constructing the URL.
+        status: "TEST",
+        type: "helm"
+      },
+      {
+        id: "inseefrlab-helm-charts-dev",
+        name: "Inseefrlab dev charts",
+        maintainer: "innovation@insee.fr",
+        location: "https://nexus.lab.$DOMAIN/repository/inseefrlab-helm-charts-dev",
+        status: "PROD",
+        type: "helm",
+        multipleServicesMode: "maxNumber",
+        maxNumberOfVersions: 2,
+        visible: { user: true, project: true },
+        restrictions: [
+          {
+            userAttribute: { key: "groups", matches: "sspcloud-(admin|dev)" }
+          }
+        ]
+      },
+      {
+        id: "zazuko",
+        name: "Zazuko",
+        maintainer: "",
+        location: "https://nexus.lab.$DOMAIN/repository/zazuko",
+        status: "PROD",
+        type: "helm",
+        multipleServicesMode: "maxNumber",
+        maxNumberOfVersions: 2,
+        visible: { user: true, project: true },
+        restrictions: [{ userAttribute: { key: "groups", matches: "zambezi" } }]
+      }
+    ]
+    regions: [
+      {
+        id: "paris",
+        name: "Kubernetes DG Insee",
+        description: "Region principale. Plateforme hébergée sur les serveurs de la direction générale de l'INSEE à Montrouge.",
+        services: {
+          type: "KUBERNETES",
+          k8sPublicEndpoint: {
+            URL: "https://apiserver.kub.$DOMAIN"
+          },
+          singleNamespace: false,
+          namespacePrefix: "user-",
+          usernamePrefix: "oidc-",
+          groupNamespacePrefix: "projet-",
+          groupPrefix: "oidc-",
+          authenticationMode: "serviceAccount",
+          namespaceAnnotationsDynamic: { enabled: true, userAttributes: ["email"] },
+          expose: {
+            domain: "user.lab.$DOMAIN",
+            ingressClassName: "onyxia"
+          },
+          monitoring: {
+            URLPattern: "https://grafana.lab.$DOMAIN/d/kYYgRWBMz/users-services?orgId=1&refresh=5s&var-namespace=$NAMESPACE&var-instance=$INSTANCE"
+          },
+          cloudshell: {
+            catalogId: "inseefrlab-helm-charts-datascience",
+            packageName: "cloudshell"
+          },
+          quotas: {
+            userEnabled: true,
+            user: {
+              requests.storage: "2Ti",
+              count/pods: "100",
+              requests.nvidia.com/gpu: "1",
+              limits.nvidia.com/gpu: "1"
+            }
+          }
+        },
+        data: {
+          S3: {
+            URL: "https://minio.lab.$DOMAIN",
+            region: "us-east-1",
+            pathStyleAccess: true,
+            monitoring: {
+              URLPattern: "https://grafana.lab.$DOMAIN/d/PhCwEJkMz/user-s3-storage?orgId=1&var-username=$BUCKET_ID"
+            },
+            sts: {
+              durationSeconds: 604800,
+              role: {
+                profileName: "default",
+                roleARN: "",
+                roleSessionName: ""
+              }
+            },
+            anonymousProfileName: "anonymous",
+            bookmarks: [
+              {
+                s3Uri: "s3://$1/",
+                title: { 
+                  fr: "Bucket personnel", 
+                  en: "Personal bucket" 
+                },
+                claimName: "onyxia-username",
+                forProfileName: "default"
+              },
+              {
+                s3Uri: "s3://projet-$1/",
+                title: { 
+                  fr: "Bucket dédié $1", 
+                  en: "$1 dedicated bucket" 
+                },
+                claimName: "groups",
+                excludedClaimPattern: "^USER_ONYXIA.*",
+                forProfileName: "default"
+              },
+              {
+                s3Uri: "s3://donnees-insee/diffusion/",
+                title: {
+                  fr: "Données de diffusion",
+                  en: "Dissemination Data"
+                },
+                forProfileName: "default"
+              }
+            ]
+          }
+        },
+        vault: {
+          URL: "https://vault.lab.$DOMAIN",
+          kvEngine: "onyxia-kv",
+          role: "onyxia-user"
+        },
+        AI: {
+          "disable": false,
+          "disallowUserToAddProviders": false,
+          "description": {
+            "en": "Use the models of your organization in your services. [Read more about this feature](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)",
+            "fr": "Utilisez les modèles de votre organisation dans vos services. [En savoir plus sur cette fonctionnalité](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)"
+          },
+          "providers": [
+            {
+              "name": "SSPCloud LLM",
+              "providerType": "openai-compatible",
+              "apiBase": "https://llm.lab.$DOMAIN/api",
+              "authentification": {
+                "type": "api-key",
+                "obtentionMethod": "open-webui-oidc-token-exchange"
+              },
+              "logoUrl": "https://minio.lab.$DOMAIN/projet-onyxia/assets/AI/openwebui.png",
+              "documentation": {
+                "mainText": {
+                  "en": "SSPCloud LLM uses Open WebUI to give you access to AI models and its OpenAI-compatible API.",
+                  "fr": "SSPCloud LLM utilise Open WebUI pour vous donner accès à des modèles d'IA et à son API compatible OpenAI."
+                },
+                "links": [
+                          {
+                            "label": { "en": "API documentation", "fr": "Documentation de l'API" },
+                            "url": "https://docs.openwebui.com/reference/api-endpoints/"
+                          },
+                          {
+                            "label": { "en": "Models documentation", "fr": "Documentation des modèles" },
+                            "url": "https://llm.lab.$DOMAIN/workspace/models"
+                          },
+                          {
+                            "label": { "en": "Models configuration (vLLM)", "fr": "Configuration des modèles (vLLM)" },
+                            "url": "https://github.com/InseeFrLab/sspcloud-llm"
+                          }
+                        ]
+                      }
+            },
+            {
+              "name": "Mistral",
+              "providerType": "mistral",
+              "apiBase": "https://api.mistral.ai/v1",
+              "logoUrl": "https://minio.lab.$DOMAIN/projet-onyxia/assets/AI/mistral.svg",
+              "documentation": {
+                "mainText": {
+                  "fr": "Saisissez votre clé API Mistral pour récupérer les modèles disponibles.",
+                  "en": "Enter your Mistral API key to retrieve available models."
+                }
+              },
+              "authentification": {
+                "type": "api-key",
+                "obtentionMethod": "user-provided"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  onboarding:
+    enabled: true
+    #image:
+    #tag: "0.1.19"
+    env:
+      security:
+        corsAllowedOrigins: ["https://*", "http://*"]

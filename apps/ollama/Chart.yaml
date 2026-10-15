@@ -1,0 +1,7 @@
+apiVersion: v2
+name: ollama
+version: 1.0.0
+dependencies:
+  - name: open-webui
+    version: 16.6.0
+    repository: https://helm.openwebui.com/

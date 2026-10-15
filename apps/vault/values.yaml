@@ -1,0 +1,43 @@
+vault:
+  global:
+    psp:
+      enabled: true
+  injector:
+    nodeSelector: |
+      infra: "true"
+    tolerations: |
+      - key: "infra"
+        operator: "Exists"
+    metrics:
+      enabled: true
+  server:
+    nodeSelector: |
+      infra: "true"
+    tolerations: |
+      - key: "infra"
+        operator: "Exists"
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+      hosts:
+        - host: vault.kub.$DOMAIN
+        - host: vault.lab.$DOMAIN
+      tls:
+        - hosts:
+            - vault.kub.$DOMAIN
+            - vault.lab.$DOMAIN
+    extraVolumes:
+      - type: secret
+        name: vault-gcp-account
+        path: /vault/userconfig
+    extraEnvironmentVars:
+      GOOGLE_PROJECT: projet-insee-poc
+      GOOGLE_REGION: europe-west1
+      GOOGLE_CREDENTIALS: /vault/userconfig/vault-gcp-account/vault-gcp-account.json
+      VAULT_SEAL_TYPE: gcpckms
+      VAULT_GCPCKMS_SEAL_KEY_RING: vault-datalab-sspcloud
+      VAULT_GCPCKMS_SEAL_CRYPTO_KEY: vault-master-key
+      DUMMY: DUMMY
+  ui:
+    enabled: true
