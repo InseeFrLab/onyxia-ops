@@ -115,27 +115,27 @@ onyxia:
       PALETTE_OVERRIDE: |
         {
           focus: {
-              main: "#3559FC",
-              light: "#4775FF",
-              light2: "#BDCDFF"
+            main: "#3559FC",
+            light: "#4775FF",
+            light2: "#BDCDFF"
           },
           dark: {
-              main: "#22252F",
-              light: "#333847",
-              greyVariant1: "#1C1F27",
-              greyVariant2: "#394053",
-              greyVariant3: "#505C79",
-              greyVariant4: "#9AA6BE",
-              greyVariant5: "#CCD4E6"
+            main: "#22252F",
+            light: "#333847",
+            greyVariant1: "#1C1F27",
+            greyVariant2: "#394053",
+            greyVariant3: "#505C79",
+            greyVariant4: "#9AA6BE",
+            greyVariant5: "#CCD4E6"
           },
           light: {
-              main: "#ECEDF2",
-              light: "#F6F7F9",
-              greyVariant1: "#E5EAF2",
-              greyVariant2: "#CCD4E6",
-              greyVariant3: "#9AA6BE",
-              greyVariant4: "#505C79",
-              greyVariant5: "#394053"
+            main: "#ECEDF2",
+            light: "#F6F7F9",
+            greyVariant1: "#E5EAF2",
+            greyVariant2: "#CCD4E6",
+            greyVariant3: "#9AA6BE",
+            greyVariant4: "#505C79",
+            greyVariant5: "#394053"
           }
         }
       HOMEPAGE_MAIN_ASSET: "false"
@@ -185,7 +185,7 @@ onyxia:
                       "title": "GPU Grade (VRAM)",
                       "type": "string",
                       "default": "16GB",
-                      "enum": ["16GB","80GB"]
+                      "enum": ["16GB", "80GB"]
                     }
                   },
                   "additionalProperties": true
@@ -274,97 +274,97 @@ onyxia:
               "description": "Git user configuration",
               "type": "object",
               "properties": {
-                  "enabled": {
-                      "type": "boolean",
-                      "description": "Add git config inside your environment",
-                      "default": true
+                "enabled": {
+                  "type": "boolean",
+                  "description": "Add git config inside your environment",
+                  "default": true
+                },
+                "name": {
+                  "type": "string",
+                  "description": "user name for git",
+                  "default": "",
+                  "x-onyxia": {
+                    "overwriteDefaultWith": "{{git.name}}"
                   },
-                  "name": {
-                      "type": "string",
-                      "description": "user name for git",
-                      "default": "",
-                      "x-onyxia": {
-                          "overwriteDefaultWith": "{{git.name}}"
-                      },
-                      "hidden": {
-                          "value": false,
-                          "path": "enabled",
-                          "isPathRelative": true
-                      }
-                  },
-                  "email": {
-                      "type": "string",
-                      "description": "user email for git",
-                      "default": "",
-                      "x-onyxia": {
-                          "overwriteDefaultWith": "{{git.email}}"
-                      },
-                      "hidden": {
-                          "value": false,
-                          "path": "enabled",
-                          "isPathRelative": true
-                      }
-                  },
-                  "cache": {
-                      "type": "string",
-                      "description": "duration in seconds of the credentials cache duration",
-                      "default": "",
-                      "x-onyxia": {
-                          "overwriteDefaultWith": "{{git.credentials_cache_duration}}"
-                      },
-                      "hidden": {
-                          "value": false,
-                          "path": "enabled",
-                          "isPathRelative": true
-                      }
-                  },
-                  "token": {
-                      "type": "string",
-                      "description": "personal access token",
-                      "default": "",
-                      "render": "password",
-                      "x-onyxia": {
-                          "overwriteDefaultWith": "{{git.token}}"
-                      },
-                      "hidden": {
-                          "value": false,
-                          "path": "enabled",
-                          "isPathRelative": true
-                      }
-                  },
-                  "repository": {
-                      "type": "string",
-                      "description": "Repository url",
-                      "default": "",
-                      "x-onyxia": {
-                          "overwriteDefaultWith": "{{git.project}}"
-                      },
-                      "hidden": {
-                          "value": false,
-                          "path": "enabled",
-                          "isPathRelative": true
-                      }
-                  },
-                  "branch": {
-                      "type": "string",
-                      "description": "Branch automatically checked out",
-                      "default": "",
-                      "hidden": {
-                          "value": false,
-                          "path": "enabled",
-                          "isPathRelative": true
-                      }
-                  },
-                  "asCodeServerRoot": {
-                      "title": "Open the service in the clone folder",
-                      "type": "boolean",
-                      "default": false,
-                      "hidden": {
-                      "value": false,
-                      "path": "enabled",
-                      "isPathRelative": true
-                      }
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
                   }
+                },
+                "email": {
+                  "type": "string",
+                  "description": "user email for git",
+                  "default": "",
+                  "x-onyxia": {
+                    "overwriteDefaultWith": "{{git.email}}"
+                  },
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
+                  }
+                },
+                "cache": {
+                  "type": "string",
+                  "description": "duration in seconds of the credentials cache duration",
+                  "default": "",
+                  "x-onyxia": {
+                    "overwriteDefaultWith": "{{git.credentials_cache_duration}}"
+                  },
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
+                  }
+                },
+                "token": {
+                  "type": "string",
+                  "description": "personal access token",
+                  "default": "",
+                  "render": "password",
+                  "x-onyxia": {
+                    "overwriteDefaultWith": "{{git.token}}"
+                  },
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
+                  }
+                },
+                "repository": {
+                  "type": "string",
+                  "description": "Repository url",
+                  "default": "",
+                  "x-onyxia": {
+                    "overwriteDefaultWith": "{{git.project}}"
+                  },
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
+                  }
+                },
+                "branch": {
+                  "type": "string",
+                  "description": "Branch automatically checked out",
+                  "default": "",
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
+                  }
+                },
+                "asCodeServerRoot": {
+                  "title": "Open the service in the clone folder",
+                  "type": "boolean",
+                  "default": false,
+                  "hidden": {
+                    "value": false,
+                    "path": "enabled",
+                    "isPathRelative": true
+                  }
+                }
               }
             }
         - relativePath: proxy.json
@@ -496,91 +496,91 @@ onyxia:
         - relativePath: vllm/resources-gpu.json
           content: |
             {
-                "$schema": "http://json-schema.org/draft-07/schema#",
-                "title": "Resources",
-                "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
-                "type": "object",
-                "properties": {
-                    "requests": {
-                        "description": "Guaranteed resources",
-                        "type": "object",
-                        "properties": {
-                            "cpu": {
-                                "description": "The amount of cpu guaranteed",
-                                "title": "CPU",
-                                "type": "string",
-                                "default": "100m",
-                                "render": "slider",
-                                "sliderMin": 100,
-                                "sliderMax": 30000,
-                                "sliderStep": 100,
-                                "sliderUnit": "m",
-                                "sliderExtremity": "down",
-                                "sliderExtremitySemantic": "guaranteed",
-                                "sliderRangeId": "cpu"
-                            },
-                            "memory": {
-                                "description": "The amount of memory guaranteed",
-                                "title": "memory",
-                                "type": "string",
-                                "default": "2Gi",
-                                "render": "slider",
-                                "sliderMin": 1,
-                                "sliderMax": 200,
-                                "sliderStep": 1,
-                                "sliderUnit": "Gi",
-                                "sliderExtremity": "down",
-                                "sliderExtremitySemantic": "guaranteed",
-                                "sliderRangeId": "memory"
-                            }
-                        }
+              "$schema": "http://json-schema.org/draft-07/schema#",
+              "title": "Resources",
+              "description": "Your service will have at least the requested resources and never more than its limits. No limit for a resource and you can consume everything left on the host machine.",
+              "type": "object",
+              "properties": {
+                "requests": {
+                  "description": "Guaranteed resources",
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "description": "The amount of cpu guaranteed",
+                      "title": "CPU",
+                      "type": "string",
+                      "default": "100m",
+                      "render": "slider",
+                      "sliderMin": 100,
+                      "sliderMax": 30000,
+                      "sliderStep": 100,
+                      "sliderUnit": "m",
+                      "sliderExtremity": "down",
+                      "sliderExtremitySemantic": "guaranteed",
+                      "sliderRangeId": "cpu"
                     },
-                    "limits": {
-                        "description": "max resources",
-                        "type": "object",
-                        "properties": {
-                            "cpu": {
-                                "description": "The maximum amount of cpu",
-                                "title": "CPU",
-                                "type": "string",
-                                "default": "15000m",
-                                "render": "slider",
-                                "sliderMin": 100,
-                                "sliderMax": 30000,
-                                "sliderStep": 100,
-                                "sliderUnit": "m",
-                                "sliderExtremity": "up",
-                                "sliderExtremitySemantic": "Maximum",
-                                "sliderRangeId": "cpu"
-                            },
-                            "memory": {
-                                "description": "The maximum amount of memory",
-                                "title": "Memory",
-                                "type": "string",
-                                "default": "50Gi",
-                                "render": "slider",
-                                "sliderMin": 1,
-                                "sliderMax": 200,
-                                "sliderStep": 1,
-                                "sliderUnit": "Gi",
-                                "sliderExtremity": "up",
-                                "sliderExtremitySemantic": "Maximum",
-                                "sliderRangeId": "memory"
-                            },
-                            "gpu": {
-                              "type": "object",
-                              "properties": {
-                                "number": {
-                                  "description": "GPU to allocate to this instance. This is also requested",
-                                  "type": "integer",
-                                  "default": 1,
-                                  "enum": [0,1]
-                                  }
-                               }
-                            }
-                        }
+                    "memory": {
+                      "description": "The amount of memory guaranteed",
+                      "title": "memory",
+                      "type": "string",
+                      "default": "2Gi",
+                      "render": "slider",
+                      "sliderMin": 1,
+                      "sliderMax": 200,
+                      "sliderStep": 1,
+                      "sliderUnit": "Gi",
+                      "sliderExtremity": "down",
+                      "sliderExtremitySemantic": "guaranteed",
+                      "sliderRangeId": "memory"
                     }
+                  }
+                },
+                "limits": {
+                  "description": "max resources",
+                  "type": "object",
+                  "properties": {
+                    "cpu": {
+                      "description": "The maximum amount of cpu",
+                      "title": "CPU",
+                      "type": "string",
+                      "default": "15000m",
+                      "render": "slider",
+                      "sliderMin": 100,
+                      "sliderMax": 30000,
+                      "sliderStep": 100,
+                      "sliderUnit": "m",
+                      "sliderExtremity": "up",
+                      "sliderExtremitySemantic": "Maximum",
+                      "sliderRangeId": "cpu"
+                    },
+                    "memory": {
+                      "description": "The maximum amount of memory",
+                      "title": "Memory",
+                      "type": "string",
+                      "default": "50Gi",
+                      "render": "slider",
+                      "sliderMin": 1,
+                      "sliderMax": 200,
+                      "sliderStep": 1,
+                      "sliderUnit": "Gi",
+                      "sliderExtremity": "up",
+                      "sliderExtremitySemantic": "Maximum",
+                      "sliderRangeId": "memory"
+                    },
+                    "gpu": {
+                      "type": "object",
+                      "properties": {
+                        "number": {
+                          "description": "GPU to allocate to this instance. This is also requested",
+                          "type": "integer",
+                          "default": 1,
+                          "enum": [0, 1]
+                        }
+                      }
+                    }
+                  }
                 }
+              }
             }
         - relativePath: ide/init.json
           content: |
@@ -794,7 +794,7 @@ onyxia:
           "cloudbeaver",
           "metabase"
         ],
-        excludedCharts: ["postgresql","hive-metastore"],
+        excludedCharts: ["postgresql", "hive-metastore"],
         type: "helm"
       },
       {
@@ -938,10 +938,10 @@ onyxia:
           quotas: {
             userEnabled: true,
             user: {
-              requests.storage: "2Ti",
-              count/pods: "100",
-              requests.nvidia.com/gpu: "1",
-              limits.nvidia.com/gpu: "1"
+              "requests.storage": "2Ti",
+              "count/pods": "100",
+              "requests.nvidia.com/gpu": "1",
+              "limits.nvidia.com/gpu": "1"
             }
           }
         },
@@ -965,18 +965,18 @@ onyxia:
             bookmarks: [
               {
                 s3Uri: "s3://$1/",
-                title: { 
-                  fr: "Bucket personnel", 
-                  en: "Personal bucket" 
+                title: {
+                  fr: "Bucket personnel",
+                  en: "Personal bucket"
                 },
                 claimName: "onyxia-username",
                 forProfileName: "default"
               },
               {
                 s3Uri: "s3://projet-$1/",
-                title: { 
-                  fr: "Bucket dédié $1", 
-                  en: "$1 dedicated bucket" 
+                title: {
+                  fr: "Bucket dédié $1",
+                  en: "$1 dedicated bucket"
                 },
                 claimName: "groups",
                 excludedClaimPattern: "^USER_ONYXIA.*",
@@ -999,57 +999,57 @@ onyxia:
           role: "onyxia-user"
         },
         AI: {
-          "disable": false,
-          "disallowUserToAddProviders": false,
-          "description": {
-            "en": "Use the models of your organization in your services. [Read more about this feature](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)",
-            "fr": "Utilisez les modèles de votre organisation dans vos services. [En savoir plus sur cette fonctionnalité](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)"
+          disable: false,
+          disallowUserToAddProviders: false,
+          description: {
+            en: "Use the models of your organization in your services. [Read more about this feature](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)",
+            fr: "Utilisez les modèles de votre organisation dans vos services. [En savoir plus sur cette fonctionnalité](https://www.$DOMAIN/document?path=SSPCloud%E2%90%A3Documentation%E2%80%BAUsing%E2%90%A3the%E2%90%A3Datalab%E2%80%BAUsing%E2%90%A3AI%E2%90%A3models%E2%90%A3in%E2%90%A3the%E2%90%A3Datalab)"
           },
-          "providers": [
+          providers: [
             {
-              "name": "SSPCloud LLM",
-              "providerType": "openai-compatible",
-              "apiBase": "https://llm.lab.$DOMAIN/api",
-              "authentification": {
-                "type": "api-key",
-                "obtentionMethod": "open-webui-oidc-token-exchange"
+              name: "SSPCloud LLM",
+              providerType: "openai-compatible",
+              apiBase: "https://llm.lab.$DOMAIN/api",
+              authentification: {
+                type: "api-key",
+                obtentionMethod: "open-webui-oidc-token-exchange"
               },
-              "logoUrl": "https://minio.lab.$DOMAIN/projet-onyxia/assets/AI/openwebui.png",
-              "documentation": {
-                "mainText": {
-                  "en": "SSPCloud LLM uses Open WebUI to give you access to AI models and its OpenAI-compatible API.",
-                  "fr": "SSPCloud LLM utilise Open WebUI pour vous donner accès à des modèles d'IA et à son API compatible OpenAI."
+              logoUrl: "https://minio.lab.$DOMAIN/projet-onyxia/assets/AI/openwebui.png",
+              documentation: {
+                mainText: {
+                  en: "SSPCloud LLM uses Open WebUI to give you access to AI models and its OpenAI-compatible API.",
+                  fr: "SSPCloud LLM utilise Open WebUI pour vous donner accès à des modèles d'IA et à son API compatible OpenAI."
                 },
-                "links": [
-                          {
-                            "label": { "en": "API documentation", "fr": "Documentation de l'API" },
-                            "url": "https://docs.openwebui.com/reference/api-endpoints/"
-                          },
-                          {
-                            "label": { "en": "Models documentation", "fr": "Documentation des modèles" },
-                            "url": "https://llm.lab.$DOMAIN/workspace/models"
-                          },
-                          {
-                            "label": { "en": "Models configuration (vLLM)", "fr": "Configuration des modèles (vLLM)" },
-                            "url": "https://github.com/InseeFrLab/sspcloud-llm"
-                          }
-                        ]
-                      }
+                links: [
+                  {
+                    label: { en: "API documentation", fr: "Documentation de l'API" },
+                    url: "https://docs.openwebui.com/reference/api-endpoints/"
+                  },
+                  {
+                    label: { en: "Models documentation", fr: "Documentation des modèles" },
+                    url: "https://llm.lab.$DOMAIN/workspace/models"
+                  },
+                  {
+                    label: { en: "Models configuration (vLLM)", fr: "Configuration des modèles (vLLM)" },
+                    url: "https://github.com/InseeFrLab/sspcloud-llm"
+                  }
+                ]
+              }
             },
             {
-              "name": "Mistral",
-              "providerType": "mistral",
-              "apiBase": "https://api.mistral.ai/v1",
-              "logoUrl": "https://minio.lab.$DOMAIN/projet-onyxia/assets/AI/mistral.svg",
-              "documentation": {
-                "mainText": {
-                  "fr": "Saisissez votre clé API Mistral pour récupérer les modèles disponibles.",
-                  "en": "Enter your Mistral API key to retrieve available models."
+              name: "Mistral",
+              providerType: "mistral",
+              apiBase: "https://api.mistral.ai/v1",
+              logoUrl: "https://minio.lab.$DOMAIN/projet-onyxia/assets/AI/mistral.svg",
+              documentation: {
+                mainText: {
+                  fr: "Saisissez votre clé API Mistral pour récupérer les modèles disponibles.",
+                  en: "Enter your Mistral API key to retrieve available models."
                 }
               },
-              "authentification": {
-                "type": "api-key",
-                "obtentionMethod": "user-provided"
+              authentification: {
+                type: "api-key",
+                obtentionMethod: "user-provided"
               }
             }
           ]
